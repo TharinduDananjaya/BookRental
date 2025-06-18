@@ -11,6 +11,8 @@ const AppRouter: React.FC = () => {
       <Route path="/" element={<BookList />} />
       <Route path="/add-book" element={<AddBook />} />
       <Route path="/book/:id" element={<BookDetail />} />
+      <Route path="/login" element={<div>Login Page (to be implemented)</div>} />
+      <Route path="/register" element={<div>Register Page (to be implemented)</div>} />
     </Routes>
   );
 };
