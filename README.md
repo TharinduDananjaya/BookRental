@@ -22,7 +22,6 @@ A full-stack Book Rental application with a Laravel backend and a React + Reduxt
 - [Vite](https://vitejs.dev/)
 - [TypeScript](https://www.typescriptlang.org/)
 - [Tailwind CSS](https://tailwindcss.com/)
-- [shadcn-ui](https://ui.shadcn.com/)
 
 ## Getting Started
 
