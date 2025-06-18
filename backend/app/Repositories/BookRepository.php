@@ -6,7 +6,7 @@ use App\Models\Book;
 
 class BookRepository
 {
-    public function getAll($author = null, $is_available = null)
+    public function getAll($author = null, $is_available = null, $title = null)
     {
         $query = Book::query();
 
@@ -16,6 +16,10 @@ class BookRepository
         if ($is_available !== null) {
             $query->where('is_available', $is_available== 'true' ? true : false);
         }
+        if ($title) {
+            $query->where('title', 'like', "%$title%");
+        }
+        
 
         return $query->paginate(6);
     }

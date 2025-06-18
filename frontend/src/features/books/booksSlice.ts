@@ -1,4 +1,3 @@
-
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import * as booksAPI from './booksAPI';
 
@@ -24,6 +23,7 @@ interface BooksState {
   filters: {
     author: string;
     available: string;
+    title?: string;
   };
 }
 
@@ -31,6 +31,7 @@ interface FetchBooksParams {
   page?: number;
   author?: string;
   is_available?: string;
+  title?: string;
 }
 
 interface BookFormData {
@@ -43,8 +44,8 @@ interface BookFormData {
 export const fetchBooks = createAsyncThunk(
   'books/fetchBooks',
   async (params: FetchBooksParams = {}) => {
-    const { page = 1, author = '', is_available = '' } = params;
-    const response = await booksAPI.getBooks({ page, author, is_available });
+    const { page = 1, author = '', is_available = '', title ='' } = params;
+    const response = await booksAPI.getBooks({ page, author, is_available, title });
     console.log('Fetched books:', response);
     return response;
   }

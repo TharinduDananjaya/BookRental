@@ -14,6 +14,7 @@ const BookList: React.FC = () => {
   const { books, loading, error, currentPage, totalPages, filters } = useSelector((state: RootState) => state.books);
   const [searchAuthor, setSearchAuthor] = useState(filters.author);
   const [availabilityFilter, setAvailabilityFilter] = useState(filters.available);
+  const [searchTitle, setSearchTitle] = useState(filters.title);
 
   useEffect(() => {
     dispatch(fetchBooks({ page: currentPage, ...filters }));
@@ -30,8 +31,8 @@ const BookList: React.FC = () => {
   }, [error]);
 
   const handleSearch = () => {
-    dispatch(setFilters({ author: searchAuthor, is_available: availabilityFilter }));
-    dispatch(fetchBooks({ page: 1, author: searchAuthor, is_available: availabilityFilter }));
+    dispatch(setFilters({ author: searchAuthor, is_available: availabilityFilter, title: searchTitle }));
+    dispatch(fetchBooks({ page: 1, author: searchAuthor, is_available: availabilityFilter, title: searchTitle }));
   };
 
   const handlePageChange = (page: number) => {
@@ -40,8 +41,9 @@ const BookList: React.FC = () => {
 
   const clearFilters = () => {
     setSearchAuthor('');
+    setSearchTitle('');
     setAvailabilityFilter('');
-    dispatch(setFilters({ author: '', available: '' }));
+    dispatch(setFilters({ author: '', available: '', title: '' }));
     dispatch(fetchBooks({ page: 1 }));
   };
 
@@ -62,6 +64,18 @@ const BookList: React.FC = () => {
                 value={searchAuthor}
                 onChange={(e) => setSearchAuthor(e.target.value)}
                 placeholder="Enter author name..."
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+              />
+            </div>
+             <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Search by Title
+              </label>
+              <input
+                type="text"
+                value={searchTitle}
+                onChange={(e) => setSearchTitle(e.target.value)}
+                placeholder="Enter Title..."
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
               />
             </div>

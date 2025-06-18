@@ -13,9 +13,9 @@ class BookService
         $this->repo = $repo;
     }
 
-    public function getBooks($author, $is_available)
+    public function getBooks($author, $is_available, $title)
     {
-        return $this->repo->getAll($author, $is_available);
+        return $this->repo->getAll($author, $is_available, $title);
     }
 
     public function getBook($id)

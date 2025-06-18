@@ -19,7 +19,7 @@ class BookController extends Controller
 
     public function index(Request $request)
     {
-        $books = $this->service->getBooks($request->query('author'), $request->query('is_available'));
+        $books = $this->service->getBooks($request->query('author'), $request->query('is_available'), $request->query('title'));
         return BookResource::collection($books);
     }
 

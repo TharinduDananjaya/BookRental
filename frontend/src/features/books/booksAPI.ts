@@ -23,6 +23,7 @@ interface GetBooksParams {
   page?: number;
   author?: string;
   is_available?: string;
+  title?: string;
 }
 
 interface BookFormData {
@@ -56,13 +57,14 @@ const apiRequest = async <T = any>(endpoint: string, options: RequestInit = {}):
 
 // API Functions
 export const getBooks = async (params: GetBooksParams = {}): Promise<BooksResponse> => {
-  const { page = 1, author = '', is_available = '' } = params;
+  const { page = 1, author = '', is_available = '', title = '' } = params;
   
   // Build query parameters
   const queryParams = new URLSearchParams();
   queryParams.append('page', page.toString());
   if (author) queryParams.append('author', author);
   if (is_available !== '') queryParams.append('is_available', is_available);
+  if (title) queryParams.append('title', title);
   
   const endpoint = `/api/books?${queryParams.toString()}`;
   return await apiRequest<BooksResponse>(endpoint);
