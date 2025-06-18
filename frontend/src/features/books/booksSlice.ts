@@ -1,44 +1,7 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import * as booksAPI from './booksAPI';
+import { BookFormData, BooksState, FetchBooksParams } from '@/types';
 
-// Types
-export interface Book {
-  id: number;
-  title: string;
-  author: string;
-  published_date: string;
-  is_available: boolean;
-  description?: string;
-  isbn?: string;
-  genre?: string;
-}
-
-interface BooksState {
-  books: Book[];
-  currentBook: Book | null;
-  loading: boolean;
-  error: string | null;
-  currentPage: number;
-  totalPages: number;
-  filters: {
-    author: string;
-    available: string;
-    title?: string;
-  };
-}
-
-interface FetchBooksParams {
-  page?: number;
-  author?: string;
-  is_available?: string;
-  title?: string;
-}
-
-interface BookFormData {
-  title: string;
-  author: string;
-  published_date: string;
-}
 
 // Async thunks
 export const fetchBooks = createAsyncThunk(

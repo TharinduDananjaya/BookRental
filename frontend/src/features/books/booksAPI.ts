@@ -1,15 +1,4 @@
-import { Book } from './booksSlice';
-
-// Types for API responses
-interface ResponseMeta {
-  meta?: {
-    current_page: number;
-    from: number;
-    last_page: number;
-    per_page: number;
-    total: number;
-  };
-}
+import { Book, BookFormData, GetBooksParams, ResponseMeta } from '@/types';
 
 interface BooksResponse extends ResponseMeta {
   data: Book[];
@@ -19,18 +8,6 @@ interface BookResponse extends ResponseMeta {
   data: Book;
 }
 
-interface GetBooksParams {
-  page?: number;
-  author?: string;
-  is_available?: string;
-  title?: string;
-}
-
-interface BookFormData {
-  title: string;
-  author: string;
-  published_date: string;
-}
 
 // Base API URL
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';

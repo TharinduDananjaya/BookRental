@@ -8,12 +8,8 @@ import { Button } from '../components/ui/button';
 import { Card } from '../components/ui/card';
 import { toast } from '@/hooks/use-toast';
 import { RootState, AppDispatch } from '../app/store';
+import { BookFormData } from '@/types';
 
-interface BookFormData {
-  title: string;
-  author: string;
-  published_date: string;
-}
 
 const AddBook: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
