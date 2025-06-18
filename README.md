@@ -58,9 +58,3 @@ php artisan migrate --seed
 php artisan serve
 
 
-### 2️⃣ Frontend (React + Redux Toolkit + TypeScript)
-
-```bash 
-    cd frontend
-    npm install
-    npm run dev
