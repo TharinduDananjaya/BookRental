@@ -1,63 +1,58 @@
-# BookRental
+# 📚 BookRental Platform
 
-A full-stack Book Rental application with a Laravel backend and a React + Reduxtoolkit + Vite frontend.
+A fullstack **Mini Book Rental System** built with:
 
-## Project Structure
+- ⚙️ **Backend**: Laravel 11 + MySQL
+- 🧑‍💻 **Frontend**: React + Redux Toolkit + TypeScript
 
-```
-.
-├── README.md
-├── backend/   # Laravel API backend
-└── frontend/  # React + Vite frontend
-```
+---
 
-## Technologies Used
+## 📝 Project Description
 
-### Backend
-- [Laravel](https://laravel.com/) (PHP)
-- Composer
+This project simulates a small-scale book rental platform where users can browse, rent, and return books. Admins can add new books and manage rentals.
 
-### Frontend
-- [React](https://react.dev/)
-- [Vite](https://vitejs.dev/)
-- [TypeScript](https://www.typescriptlang.org/)
-- [Tailwind CSS](https://tailwindcss.com/)
+---
 
-## Getting Started
+## 🧩 Features
 
-### Prerequisites
+### 🔵 Frontend (React + Redux Toolkit + TypeScript)
 
-- Node.js & npm ([install guide](https://github.com/nvm-sh/nvm#installing-and-updating))
-- PHP (>=8.1)
-- Composer
-- MySQL or another supported database
+- ✅ Paginated **Book List** view
+- 🔍 Filter by **author** or **availability**
+- 📘 Each book card shows: title, author, and status
+- ➕ **Add New Book** form with validation
+- 📄 **Book Detail Page**
+  - Shows full book info
+  - Rent button if book is available
+- ⚙️ State Management: **Redux Toolkit** (Redux Thunks)
+- 🚀 Form validation: **React Hook Form**
+- 🔁 Navigation: **React Router**
+- ✨ Good UX: toast notifications, loading & error states
 
-### Backend Setup
+### 🟠 Backend (Laravel 11 + MySQL)
 
-```sh
+- RESTful API with:
+  - `GET /api/books` – List all books (with optional `?author=` or `?is_available=`)
+  - `GET /api/books/{id}` – Book details
+  - `POST /api/books` – Add a new book (Admin only)
+  - `POST /api/books/{id}/rent` – Mark book as rented
+  - `POST /api/books/{id}/return` – Mark book as returned (Admin only)
+- 🧠 Repository & Service pattern
+- 🛡️ Validation: **Form Requests**
+- 📦 Consistent API responses using **Resource classes**
+- 🔐 Role-based access control (Admin vs User)
+- 📊 Database: Migrations + Seeders with sample data
+
+---
+
+## 🚀 Getting Started
+
+### 1️⃣ Backend (Laravel)
+
+```bash
 cd backend
-cp .env.example .env
 composer install
-php artisan key:generate
-php artisan migrate
-php artisan serve
-```
-
-### Frontend Setup
-
-```sh
-cd frontend
 cp .env.example .env
-npm install
-npm run dev
-```
-
-The frontend will be available at `http://localhost:5173` by default.
-
-## Contributing
-
-Pull requests are welcome! Please see the contributing guidelines in [backend/README.md](backend/README.md).
-
-## License
-
-This project is open-sourced under the [MIT license](https://opensource.org/licenses/MIT).
+php artisan key:generate
+php artisan migrate --seed
+php artisan serve
