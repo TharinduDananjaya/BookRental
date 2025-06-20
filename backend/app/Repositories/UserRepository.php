@@ -88,4 +88,9 @@ class UserRepository implements BaseUserRepositoryInterface
     {
         return $user->delete();
     }
+
+     public function getByEmail(string $email)
+    {
+        return User::where('email', $email)->first();
+    }
 }
