@@ -52,4 +52,9 @@ class BookRepository
         $book->save();
         return $book;
     }
+
+    public function getByTitle($title)
+    {
+        return Book::where('title', $title)->first();
+    }
 }
