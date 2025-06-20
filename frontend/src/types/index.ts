@@ -5,7 +5,6 @@ export interface User {
   role: 'user' | 'admin';
 }
 
-
 export interface Book{
     id: number;
     title: string;
@@ -77,3 +76,25 @@ export interface FetchBooksParams {
   title?: string;
 }
 
+
+
+
+export interface LoginCredentials {
+  email: string;
+  password: string;
+}
+
+export interface RegisterCredentials {
+  email: string;
+  password: string;
+  name: string;
+  role?: 'admin' | 'user';
+}
+
+export interface AuthState {
+  user: User | null;
+  token: string | null;
+  loading: boolean;
+  error: string | null;
+  isAuthenticated: boolean;
+}

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -8,13 +7,18 @@ import { Button } from '../components/ui/button';
 import { Card } from '../components/ui/card';
 import { toast } from '@/hooks/use-toast';
 import { RootState, AppDispatch } from '../app/store';
-import { BookFormData } from '@/types';
 
+interface BookFormData {
+  title: string;
+  author: string;
+  publishedDate: string;
+}
 
 const AddBook: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const { loading } = useSelector((state: RootState) => state.books);
+  const { user } = useSelector((state: RootState) => state.auth);
   
   const {
     register,
@@ -24,22 +28,46 @@ const AddBook: React.FC = () => {
   } = useForm<BookFormData>();
 
   const onSubmit = async (data: BookFormData) => {
-    try {
-      await dispatch(addBook(data)).unwrap();
-      toast({
-        title: "Success!",
-        description: "Book added successfully to the library.",
-      });
-      reset();
-      navigate('/');
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to add book. Please try again.",
-        variant: "destructive"
-      });
-    }
-  };
+      if (user?.role !== 'admin') {
+        toast({
+          title: "Access Denied",
+          description: "Only admins can add books.",
+          variant: "destructive"
+        });
+        return;
+      }
+  
+      try {
+        await dispatch(addBook({
+          title: data.title,
+          author: data.author,
+          published_date: data.publishedDate
+        })).unwrap();
+        toast({
+          title: "Success!",
+          description: "Book added successfully to the library.",
+        });
+        reset();
+        navigate('/');
+      } catch (error) {
+        toast({
+          title: "Error",
+          description: "Failed to add book. Please try again.",
+          variant: "destructive"
+        });
+      }
+    };
+
+  if (user?.role !== 'admin') {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="max-w-2xl mx-auto text-center">
+          <h1 className="text-3xl font-bold text-gray-900 mb-4">Access Denied</h1>
+          <p className="text-gray-600">Only administrators can access this page.</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -95,7 +123,7 @@ const AddBook: React.FC = () => {
                 </label>
                 <input
                   type="date"
-                  {...register('published_date', { 
+                  {...register('publishedDate', { 
                     required: 'Published date is required',
                     validate: (value: string) => {
                       const selectedDate = new Date(value);
@@ -104,11 +132,11 @@ const AddBook: React.FC = () => {
                     }
                   })}
                   className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent ${
-                    errors.published_date ? 'border-red-500' : 'border-gray-300'
+                    errors.publishedDate ? 'border-red-500' : 'border-gray-300'
                   }`}
                 />
-                {errors.published_date && (
-                  <p className="mt-1 text-sm text-red-600">{errors.published_date.message}</p>
+                {errors.publishedDate && (
+                  <p className="mt-1 text-sm text-red-600">{errors.publishedDate.message}</p>
                 )}
               </div>
 

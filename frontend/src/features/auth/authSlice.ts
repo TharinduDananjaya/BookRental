@@ -1,31 +1,13 @@
+import { AuthState, LoginCredentials, RegisterCredentials, User } from '@/types';
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 
-export interface User {
-  id: string;
-  email: string;
-  name: string;
-  role: 'admin' | 'user';
+
+
+function getCookieValue(name: string): string | null {
+  const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+  return match ? decodeURIComponent(match[2]) : null;
 }
 
-interface LoginCredentials {
-  email: string;
-  password: string;
-}
-
-interface RegisterCredentials {
-  email: string;
-  password: string;
-  name: string;
-  role?: 'admin' | 'user';
-}
-
-interface AuthState {
-  user: User | null;
-  token: string | null;
-  loading: boolean;
-  error: string | null;
-  isAuthenticated: boolean;
-}
 
 // Mock API calls - replace with real API endpoints
 export const loginUser = createAsyncThunk(
@@ -52,12 +34,16 @@ export const loginUser = createAsyncThunk(
 export const registerUser = createAsyncThunk(
   'auth/register',
   async (credentials: RegisterCredentials) => {
-    // Mock API call
-    const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api/auth/register`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(credentials),
-    });
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/register`, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+    'X-XSRF-TOKEN': getCookieValue('XSRF-TOKEN') || '',
+  },
+  credentials: 'include',
+  body: JSON.stringify(credentials),
+});
     
     if (!response.ok) {
       throw new Error('Registration failed');
@@ -70,13 +56,26 @@ export const registerUser = createAsyncThunk(
   }
 );
 
+
+let userData: User | null = null;
+try {
+  const userJson = localStorage.getItem('user');
+  if (userJson) {
+    userData = JSON.parse(userJson);
+  }
+} catch (error) {
+  console.error('Failed to parse user from localStorage:', error);
+  localStorage.removeItem('user'); // Clean corrupted data
+}
+
 const initialState: AuthState = {
-  user: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')!) : null,
+  user: userData,
   token: localStorage.getItem('token'),
   loading: false,
   error: null,
   isAuthenticated: !!localStorage.getItem('token'),
 };
+
 
 const authSlice = createSlice({
   name: 'auth',

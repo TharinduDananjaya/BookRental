@@ -1,69 +1,91 @@
-<?php 
+<?php
 
 namespace App\Repositories;
 
 use App\Models\User;
-class UserRepository
+use App\Repositories\Base\UserRepositoryInterface as BaseUserRepositoryInterface;
+use Illuminate\Support\Facades\Hash;
+
+class UserRepository implements BaseUserRepositoryInterface
 {
-    public function getAll($role = null, $name = null)
+    /**
+     * Create a new user
+     *
+     * @param array $data
+     * @return User
+     */
+    public function create(array $data): User
     {
-        $query = User::query();
-
-        if ($role) {
-            $query->where('role', $role);
-        }
-        if ($name) {
-            $query->where('name', 'like', "%$name%");
-        }
-
-        return $query->paginate(6);
+        return User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+            'role' => $data['role'] ?? 'user',
+        ]);
     }
 
-    public function getById($id)
-    {
-        return User::findOrFail($id);
-    }
-    public function create(array $data)
-    {
-        return User::create($data);
-    }
-    public function update($id, array $data)
-    {
-        $user = User::findOrFail($id);
-        $user->update($data);
-        return $user;
-    }
-    public function delete($id)
-    {
-        $user = User::findOrFail($id);
-        $user->delete();
-        return $user;
-    }
-    public function changeRole($id, $role)
-    {
-        $user = User::findOrFail($id);
-        $user->role = $role;
-        $user->save();
-        return $user;
-    }
-    public function getByEmail($email)
+    /**
+     * Find user by email
+     *
+     * @param string $email
+     * @return User|null
+     */
+    public function findByEmail(string $email): ?User
     {
         return User::where('email', $email)->first();
     }
-    public function getByName($name)
+
+    /**
+     * Find user by ID
+     *
+     * @param int $id
+     * @return User|null
+     */
+    public function findById(int $id): ?User
     {
-        return User::where('name', $name)->first();
+        return User::find($id);
     }
-    public function getByEmailOrName($email, $name)
+
+    /**
+     * Update user
+     *
+     * @param User $user
+     * @param array $data
+     * @return User
+     */
+    public function update(User $user, array $data): User
     {
-        return User::where('email', $email)->orWhere('name', $name)->first();
+        $updateData = [];
+        
+        if (isset($data['name'])) {
+            $updateData['name'] = $data['name'];
+        }
+        
+        if (isset($data['email'])) {
+            $updateData['email'] = $data['email'];
+        }
+        
+        if (isset($data['password'])) {
+            $updateData['password'] = Hash::make($data['password']);
+        }
+        
+        if (isset($data['role'])) {
+            $updateData['role'] = $data['role'];
+        }
+
+        $user->update($updateData);
+        
+        return $user->fresh();
     }
-    public function getByRole($role)
+
+    /**
+     * Delete user
+     *
+     * @param User $user
+     * @return bool
+     */
+    public function delete(User $user): bool
     {
-        return User::where('role', $role)->get();
-    }
-    public function getByRoleAndName($role, $name)
-    {
-        return User::where('role', $role)->where('name', 'like', "%$name%")->get();
+        return $user->delete();
     }
 }
